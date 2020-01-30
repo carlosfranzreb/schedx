@@ -1,0 +1,31 @@
+/* CSS Document */
+
+table {
+	width: 100%;
+	overflow: auto;
+	background-color: beige;
+	border: none;
+	border-collapse: collapse;;
+}
+
+tbody { border: none; }
+
+td {
+	height: 25px;
+	text-align: center;
+	color: #3156A3;
+	font-size: 15px;
+}
+
+th {
+	text-align: center;
+	color: white;
+	font-size: 15px;
+}
+
+tr {
+	vertical-align: center;
+	border: none;
+}
+
+tr:hover{background-color: #FFC749}

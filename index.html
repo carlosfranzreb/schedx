@@ -1,0 +1,234 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>SchedX</title>
+		<link rel = "stylesheet" href = "css/main.css">
+		<link rel = "stylesheet" href = "css/table.css">
+		<script src="js/main.js"></script>
+		<script src="js/jquery.min.js"></script>
+		<script src="js/echarts.min.js"></script>
+	</head>
+
+<body onload="setOptionsOptions()">
+
+	<div class = "header">
+		<div class = "headertitle"> check multiple dt's </div>
+	</div>
+
+	<div id = "box">
+
+		<p class="headertitle">Options</p>
+		<button id="returnbtn" onClick="reloadPage()">Reload</button>
+		<select class = "selectOptions" id = "selectperson"></select>
+		<select class = "selectOptions" id = "selectyear" onChange="setOptionsMonths()"></select>
+		<select class = "selectOptions" id = "selectmonth"></select>
+		<button id="gobtn" onClick="openTable()">Go</button>
+		<div id = "buttons">
+			<button class = "addbtn" onClick="openSettings()">Settings</button>
+			<button class = "addbtn" onClick="printTable()">Print</button>
+		</div>
+	</div>
+
+	<div id = "leftdown">
+		<div id = "totals">
+			<table>
+				<tr>
+					<td style="text-align: left">Work Days</td>
+					<td style="text-align: left"><input class = "whiteinput" id = "totaldays" readonly></td>
+				</tr>
+				<tr>
+					<td style="text-align: left">Daily total to do</td>
+					<td style="text-align: left"><input class = "whiteinput" id = "dailytotal" onChange="updateDailyTotal(this)" readonly></td>
+				</tr>
+				<tr>
+					<td style="text-align: left">Monthly total to do</td>
+					<td style="text-align: left"><input class = "whiteinput" id = "monthlytotal" readonly></td>
+				</tr>
+				<tr>
+					<td style="text-align: left">Total done</td>
+					<td style="text-align: left"><input class = "whiteinput" id = "totaldone" readonly></td>
+				</tr>
+				<tr>
+					<td style="text-align: left">+/- hours this month</td>
+					<td style="text-align: left"><input class = "whiteinput" id = "pmnow" readonly></td>
+				</tr>
+				<tr>
+					<td style="text-align: left">+/- hours previous</td>
+					<td style="text-align: left"><input class = "whiteinput" id = "pmprev" readonly></td>
+				</tr>
+				<tr>
+					<td style="text-align: left">+/- hours total</td>
+					<td style="text-align: left"><input class = "whiteinput" id = "pm" readonly></td>
+				</tr>
+				<tr>
+					<td style="text-align: left">Holiday this month / total/ (to take)</td>
+					<td style="text-align: left"><input class = "whiteinput" style="width: 125px" id = "holidaystaken" readonly></td>
+				</tr>
+				<tr>
+					<td style="text-align: left">HO sum/in WD/WD%</td>
+					<td style="text-align: left"><input class = "whiteinput" style="width: 175px" id = "homeoffice" readonly></td>
+				</tr>
+			</table>
+		</div>
+	</div>
+
+	<div id = "tableside">
+
+		<div class = "tabheader" id="tabheaderhours">
+			<table>
+				<tr style="background-color: #FFB100; border: none;">
+					<th style="width:6%">Day</th>
+					<th style="width:12.5%">Date</th>
+					<th style="width:10%">Start</th>
+					<th style="width:10%">End</th>
+					<th style="width:10%">Break</th>
+					<th style="width:10%">Sum</th>
+					<th style="width:7%">HO</th>
+					<th style="width:7%">Work</th>
+					<th style="width:7%">Holiday</th>
+					<th style="width:7%">Sick</th>
+					<th style="width:14.5%">Comment</th>
+				</tr>
+			</table>
+		</div>
+
+		<div id = "table"></div>
+		<p id="warning"> ** Click on the date to generate a new entry, on the day to delete it ** </p>
+
+		<div id="settings">
+			<button onClick="newMonth()" class = "settingsbtn">New Month</button>
+			<button onClick="setHolidays()" class = "settingsbtn" style="top:20%">Holidays</button>
+			<button onClick="openStaffOptions()" class = "settingsbtn" style="top:30%">Staff</button>
+			<button onClick="openGraphOptions()" class = "settingsbtn" style="top:40%">Graphs</button>
+			<button onClick="openOverviewOptions()" class = "settingsbtn" style="top:50%">Overview</button>
+		</div>
+
+		<div id = "newmonth">
+			<input id = "yearnew" placeholder="Year">
+
+			<select id = "monthnew" class="cssnewmonth" style="top:15%">
+				<option disabled selected>Select month</option>
+				<option> January </option>
+				<option> February</option>
+				<option> March </option>
+				<option> April </option>
+				<option> May </option>
+				<option> June </option>
+				<option> July </option>
+				<option> August </option>
+				<option> September </option>
+				<option> October </option>
+				<option> November </option>
+				<option> December </option>
+			</select>
+
+			<select id="firstday" class="cssnewmonth" style="top:25%">
+				<option disabled selected>First week-day</option>
+				<option> Monday </option>
+				<option> Tuesday </option>
+				<option> Wednesday </option>
+				<option> Thursday </option>
+				<option> Friday </option>
+				<option> Saturday </option>
+				<option> Sunday </option>
+			</select>
+
+			<select id="lastday" class="cssnewmonth" style="top:35%">
+				<option disabled selected>Last month-day</option>
+				<option> 28 </option>
+				<option> 29 </option>
+				<option> 30 </option>
+				<option> 31 </option>
+			</select>
+
+			<button onClick="createMonth()"> Create Month </button>
+		</div>
+
+		<div id = "staff">
+			<button onClick="getTableWorkers()" class="settingsbtn">Manage Staff</button>
+			<button onClick="setStaffYears()" class="settingsbtn" style="top:20%">Daily totals</button>
+			<select class="cssnewmonth" id="selectStaffYear" onChange="setStaffMonths()" style="top: 30%; display: none"></select>
+			<select class="cssnewmonth" id="selectStaffMonth" style="top: 40%; display: none"></select>
+			<button class="settingsbtn" id="openDTTablebtn" onClick="openDTTable()" style="top: 50%; display: none; text-align: center">Go</button>
+		</div>
+
+		<div id="dttable">
+			<div id="dttable_title"></div>
+			<div id="dttable_table"></div>
+		</div>
+
+		<div id="workers">
+			<div id="tableworkers"></div>
+			<button class="addworker" onClick="newWorker()">Add worker</button>
+		</div>
+
+
+		<div id="setHolidays">
+			<div id="holidayOptions">
+				<select id="holidayYear" class = "cssnewmonth" style="top:10%" onChange="setHolidayMonths()"></select>
+				<select id="holidayMonth" class = "cssnewmonth" style="top:20%"></select>
+				<button onClick="openHolidayTable()" class="settingsbtn" style="top:30%">Public holidays</button>
+				<button onClick="openHolidayEach()" class = "settingsbtn" style="top:40%">Total days per person</button>
+			</div>
+
+			<div id="chosenHoliday">
+				<div class = "tabheader" id="tabheaderholiday" style = "top: 11%">
+					<table>
+						<tr style="background-color: #FFB100; border: none;">
+							<th style="width: 40%">Day</th>
+							<th style="width: 30%">Date</th>
+							<th style="width: 30%">Holiday</th>
+						</tr>
+					</table>
+				</div>
+
+				<div class = "tabheader" id="tabheaderholiday3" style = "top: 11%">
+					<table>
+						<tr style="background-color: #FFB100; border: none;">
+							<th style="width: 50%">Name</th>
+							<th style="width: 50%">Holidays to take</th>
+						</tr>
+					</table>
+				</div>
+
+				<div id="tableholiday" style="top: 16%; height: 80%"></div>
+			</div>
+
+		</div>
+
+		<div id="graphs">
+			<div id="graphOptions">
+				<select class = "cssnewmonth" id = "selectGraphMode" style="top: 10%">
+					<option>General</option>
+					<option>Home Office</option>
+				</select>
+				<select class = "cssnewmonth" id = "selectGraphPerson" style="top: 20%" onChange="checkOffice()"></select>
+				<select class = "cssnewmonth" id = "selectGraphYear" style="top: 30%" onChange="setGraphMonths()"></select>
+				<select class = "cssnewmonth" id = "selectGraphMonth" style="top: 40%; display: none"></select>
+				<button onClick="openGraph();" class = "settingsbtn" id="goGraph" style="top: 40%">Open</button>
+			</div>
+
+			<div id="graph" style="top: 3%; height: 90%"></div>
+		</div>
+
+		<div id="overview">
+			<div id="overviewOptions">
+				<select id="overviewYear" class = "cssnewmonth" style="top:10%" onChange="setOverviewMonths()"></select>
+				<select id="overviewMonth" class = "cssnewmonth" style="top:20%"></select>
+				<select id="overviewOption" class="cssnewmonth" style="top: 30%">
+					<option disabled selected>Select option</option>
+					<option>Sick days</option>
+					<option>Holidays</option>
+				</select>
+				<button onClick="openOverviewTable()" class="settingsbtn" style="top:40%">Go</button>
+			</div>
+
+			<div id="overviewTitle"></div>
+			<div class = "tabheader" id="tabHeaderOverview" style = "top: 11%"></div>
+			<div id="overviewTable" style="top: 16%; height: 80%"></div>
+		</div>
+
+	</div>
+</body>
+</html>
