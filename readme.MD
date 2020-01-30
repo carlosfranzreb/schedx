@@ -1,4 +1,4 @@
-* SchedX
+# SchedX
 
 Software for companies to track the shifts, holidays and sick days of their employees. It also tracks extra hours, and time worked from home. The main view is a table with all days of the current month, where every registered employee may write down their shifts. Users may navigate through the different tables using a menu in the left hand side of the screen.
 
