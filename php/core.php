@@ -46,7 +46,7 @@ function saveDB() {
 	}
 
 	//save file
-	$fname = 'eeraWH-'.time().'.sql';
+	$fname = 'schedx-'.time().'.sql';
 	$handle = fopen('../backups/'.$fname,'w+');
 	fwrite($handle,$return);
 	fclose($handle);
